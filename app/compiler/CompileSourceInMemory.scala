@@ -3,19 +3,7 @@ package compiler
 import javax.tools.{Diagnostic, JavaFileObject, DiagnosticCollector, ToolProvider}
 import java.io.{PrintWriter, StringWriter}
 import java.util
-import play.api.libs.json._
-import play.api.libs.functional.syntax._
-
-case class InMemoryCompilerError(code: String,
-                         kind: String,
-                         position: Long,
-                         startPosition: Long,
-                         endPosition: Long,
-                         message: String)
-object InMemoryCompilerError {
-  implicit val compilerErrorReads = Json.reads[InMemoryCompilerError]
-  implicit val compilerErrorWrites = Json.writes[InMemoryCompilerError]
-}
+import org.apache.commons.lang3.StringUtils
 
 object CompileSourceInMemory {
   def compile(code: String) = {
@@ -34,10 +22,11 @@ object CompileSourceInMemory {
 
     val success = task.call
 
-    var errors = List[InMemoryCompilerError]()
+    var errors = List[CompilerError]()
     for (diagnostic <- diagnostics.getDiagnostics.toArray[Diagnostic[JavaFileObject]](new Array[Diagnostic[JavaFileObject]](0))) {
-      errors = InMemoryCompilerError(
-        diagnostic.getCode, diagnostic.getKind.toString, diagnostic.getPosition, diagnostic.getStartPosition,
+      val line = StringUtils.countMatches(code.substring(0, diagnostic.getPosition.toInt), "\n")
+      errors = CompilerError(
+        diagnostic.getCode, diagnostic.getKind.toString, line, diagnostic.getPosition, diagnostic.getStartPosition,
         diagnostic.getEndPosition, diagnostic.getMessage(null)
       ) :: errors
     }
