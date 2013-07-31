@@ -1,0 +1,21 @@
+@(title: String, question: String = "", code: String = "")
+
+@main(title) {
+    @helper.form(action = routes.Application.compile) {
+        <fieldset>
+            <div class="form-group">
+                <label for="exampleInputEmail">@question</label>
+                <textarea id="code-area" name="code">@code</textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </fieldset>
+
+        <script type="text/javascript">
+            var editor = CodeMirror.fromTextArea(document.getElementById("code-area"), {
+                lineNumbers: true,
+                matchBrackets: true,
+                mode: "text/x-java"
+            });
+        </script>
+    }
+}
