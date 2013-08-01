@@ -6,7 +6,7 @@ import java.util
 import org.apache.commons.lang3.StringUtils
 
 object CompileSourceInMemory {
-  def compile(code: String) = {
+  def compile(className: String, code: String) = {
     val compiler = ToolProvider.getSystemJavaCompiler
     val diagnostics: DiagnosticCollector[JavaFileObject] = new DiagnosticCollector[JavaFileObject]
 
@@ -15,7 +15,7 @@ object CompileSourceInMemory {
     out.println(code)
     out.close()
 
-    val file = new JavaSourceFromString("InterviewCode", writer.toString)
+    val file = new JavaSourceFromString(className, writer.toString)
 
     val compilationUnits = util.Arrays.asList(file)
     val task = compiler.getTask(null, null, diagnostics, null, null, compilationUnits)
