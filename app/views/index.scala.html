@@ -18,17 +18,31 @@
         });
 
         var compilerTimer = null;
-        var compile = function() {
+        var compile = function(callback) {
             $.ajax({
                 type: "POST",
                 url: "@routes.Application.compile()",
                 data: {code: editor.getValue()},
                 dataType: 'json',
-                success: function () {
-                    alert("oh!")
-                }
+                success: callback
             });
-        }
+        };
+
+        var submitSolution = function() {
+            compile(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@routes.Application.test()",
+                    data: {code: editor.getValue()},
+                    dataType: 'json',
+                    success: processTestResults()
+                });
+            });
+        };
+
+        var processTestResults = function () {
+            console.log(arguments)
+        };
 
         editor.on("change", function() {
             if (compilerTimer != null) {
@@ -40,6 +54,6 @@
 
         $(function() {
             $("#btn-submit").click(submitSolution);
-        })
+        });
     </script>
 }
