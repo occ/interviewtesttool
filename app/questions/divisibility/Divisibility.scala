@@ -3,7 +3,6 @@ package questions.divisibility
 import interfaces.Question
 import org.junit.Assert._
 
-
 class Divisibility extends Question{
   val id: String = "000-Divisibility"
 
@@ -21,7 +20,7 @@ class Divisibility extends Question{
       |    return null;
       |  }
       |}
-    """.stripMargin
+      |""".stripMargin
 
   val tests: Array[Class[_] => Unit] = Array({
     c => {
