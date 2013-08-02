@@ -10,7 +10,7 @@ editor.on("change", function() {
         clearTimeout(compilerTimer);
     }
 
-    compilerTimer = setTimeout(compile, 800);
+    compilerTimer = setTimeout(compile, 25);
 });
 
 var Range = ace.require('ace/range').Range;
@@ -43,7 +43,7 @@ var compile = function(callback) {
     clearMarkers();
     $.ajax({
         type: "POST",
-        url: "@routes.Application.compile()",
+        url: compileUrl,
         data: {code: editor.getValue()},
         dataType: 'json',
         complete: [addMarkers, callback]
@@ -58,7 +58,7 @@ var submitSolution = function() {
     compile(function () {
         $.ajax({
             type: "POST",
-            url: "@routes.Application.test()",
+            url: testUrl,
             data: {code: editor.getValue()},
             dataType: 'json',
             success: processTestResults()
