@@ -9,8 +9,8 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     "org.reflections" % "reflections" % "0.9.9-RC1",
     "org.webjars" %% "webjars-play" % "2.1.0-3",
+    "org.webjars" % "ace" % "04.09.2013",
     "org.webjars" % "bootstrap" % "3.0.0-rc1",
-    "org.webjars" % "codemirror" % "3.14",
     "org.webjars" % "jquery" % "2.0.3",
     jdbc,
     anorm

@@ -4,18 +4,46 @@
     <fieldset>
         <div class="form-group">
             <label for="exampleInputEmail">@question</label>
-            <textarea id="code-area" name="code">@code</textarea>
+            <div id="code-area" name="code">@code</div>
         </div>
         <button type="button" id="btn-submit" class="btn btn-default">Submit</button>
     </fieldset>
 
+    <style type="text/css" media="screen">
+        #code-area {
+            position: relative;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 400px;
+        }
+
+        .squiggly {
+            background: url("data:image/gif;base64,R0lGODlhCgAEAMIEAP9BGP6pl//Wy/7//P///////////////yH5BAEKAAQALAAAAAAKAAQAAAMROCOhK0oA0MIUMmTAZhsWBCYAOw==") repeat-x scroll 0px 100% transparent;
+            display: inline-block;
+            padding-bottom: 1px;
+            position: absolute;
+        }
+    </style>
+
+    <script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("/src-min-noconflict/ace.js"))"></script>
+
     <script type="text/javascript">
-        var editor = CodeMirror.fromTextArea(document.getElementById("code-area"), {
-            lineNumbers: true,
-            matchBrackets: true,
-            mode: "text/x-java",
-            theme: "eclipse"
+        var editor = ace.edit(document.getElementById("code-area"));
+        editor.setTheme("ace/theme/chrome");
+        editor.getSession().setMode("ace/mode/java");
+
+        editor.on("change", function() {
+            if (compilerTimer != null) {
+                clearTimeout(compilerTimer);
+            }
+
+            compilerTimer = setTimeout(compile, 800);
         });
+
+        var Range = ace.require('ace/range').Range;
+        var editorSession = editor.getSession();
 
         var compilerTimer = null;
         var compile = function(callback) {
@@ -44,13 +72,6 @@
             console.log(arguments)
         };
 
-        editor.on("change", function() {
-            if (compilerTimer != null) {
-                clearTimeout(compilerTimer);
-            }
-
-            compilerTimer = setTimeout(compile, 800);
-        });
 
         $(function() {
             $("#btn-submit").click(submitSolution);

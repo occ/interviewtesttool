@@ -35,7 +35,7 @@ object Application extends Controller {
     val (success, errors) = CompileJavaSourceInMemory.compile(question.mainClass, code)
 
     val resultObj = Json.obj(
-      "status" -> (if (success) true else false),
+      "success" -> (if (success) true else false),
       "errors" -> errors
     )
     Ok(resultObj)

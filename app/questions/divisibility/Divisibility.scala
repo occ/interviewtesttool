@@ -20,7 +20,7 @@ class Divisibility extends Question{
       |    return null;
       |  }
       |}
-      |""".stripMargin
+      """.stripMargin.trim
 
   val tests: Array[Class[_] => Unit] = Array({
     c => {
