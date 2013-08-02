@@ -4,7 +4,7 @@ import javax.tools.{Diagnostic, JavaFileObject, DiagnosticCollector, ToolProvide
 import java.io.{PrintWriter, StringWriter}
 import java.util
 import org.apache.commons.lang3.StringUtils
-import compiler.{Position, CompilerIssue}
+import compiler.{CompilerIssue}
 
 object JavaCompiler {
   def compile(className: String, code: String) = {
