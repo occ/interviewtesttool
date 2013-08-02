@@ -5,7 +5,7 @@ import play.api.data.Forms._
 import play.api.mvc._
 import play.api.libs.json._
 import java.util.UUID
-import compiler.java.CompileJavaSourceInMemory
+import compiler.java.JavaCompiler
 
 object Application extends Controller {
 
@@ -32,7 +32,7 @@ object Application extends Controller {
 
     val question = new questions.divisibility.Divisibility
 
-    val (success, errors) = CompileJavaSourceInMemory.compile(question.mainClass, code)
+    val (success, errors) = JavaCompiler.compile(question.mainClass, code)
 
     val resultObj = Json.obj(
       "success" -> (if (success) true else false),

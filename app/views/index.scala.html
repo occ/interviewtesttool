@@ -32,7 +32,10 @@
     <script type="text/javascript">
         var editor = ace.edit(document.getElementById("code-area"));
         editor.setTheme("ace/theme/chrome");
-        editor.getSession().setMode("ace/mode/java");
+
+        var editorSession = editor.getSession();
+        editorSession.setMode("ace/mode/java");
+        editorSession.setUseSoftTabs(true);
 
         editor.on("change", function() {
             if (compilerTimer != null) {
@@ -43,17 +46,44 @@
         });
 
         var Range = ace.require('ace/range').Range;
-        var editorSession = editor.getSession();
 
+        var markers = [];
         var compilerTimer = null;
+
+        var addMarkers = function(response) {
+            clearMarkers();
+
+            data = response.responseJSON;
+            if (data.success)
+                return;
+
+            for (var i = 0; i < data.errors.length; i++) {
+                var error = data.errors[i];
+                var range = new Range(error.startLine, error.startColumn, error.endLine, error.endColumn);
+                markers.push(editorSession.addMarker(range, "squiggly", "typo", true));
+            }
+        }
+
+        var clearMarkers = function () {
+            for (var i = 0; i < markers.length; i++) {
+                editorSession.removeMarker(markers[i]);
+            }
+            markers = [];
+        }
+
         var compile = function(callback) {
+            clearMarkers();
             $.ajax({
                 type: "POST",
                 url: "@routes.Application.compile()",
                 data: {code: editor.getValue()},
                 dataType: 'json',
-                success: callback
+                complete: [addMarkers, callback]
             });
+        };
+
+        var processTestResults = function () {
+            console.log(arguments)
         };
 
         var submitSolution = function() {
@@ -67,11 +97,6 @@
                 });
             });
         };
-
-        var processTestResults = function () {
-            console.log(arguments)
-        };
-
 
         $(function() {
             $("#btn-submit").click(submitSolution);
