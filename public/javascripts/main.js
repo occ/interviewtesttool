@@ -10,7 +10,7 @@ editor.on("change", function() {
         clearTimeout(compilerTimer);
     }
 
-    compilerTimer = setTimeout(compile, 25);
+    compilerTimer = setTimeout(compile, 100);
 });
 
 var Range = ace.require('ace/range').Range;
@@ -40,7 +40,6 @@ var clearMarkers = function () {
 }
 
 var compile = function(callback) {
-    clearMarkers();
     $.ajax({
         type: "POST",
         url: compileUrl,
