@@ -7,5 +7,7 @@ trait Question {
   val mainClass: String
   val template: String
 
-  val tests: Array[Class[_] => Unit]
+  val tests: Array[Any => Unit]
+
+  def test(obj: Any) = tests.foreach(test => test(obj))
 }

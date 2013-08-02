@@ -22,7 +22,7 @@ class Divisibility extends Question{
       |}
       """.stripMargin.trim
 
-  val tests: Array[Class[_] => Unit] = Array({
+  val tests: Array[Any => Unit] = Array({
     c => {
       val r = getResults(c)
       val result = for (i <- 3 to 10000 if i % 3 == 0 || i % 5 == 0) yield i
@@ -30,11 +30,12 @@ class Divisibility extends Question{
     }
   })
 
-  def getResults(c: Class[_]) = {
-    val m = c.getMethod("findNumbers", null)
+  def getResults(o: Any) = {
+    val c = o.getClass
+    val m = c.getMethod("findNumbers")
     assert(m != null, "Method findNumbers() was not found")
     assert(m.getReturnType == classOf[Array[Int]], "Method findNumbers() doesn't return int[]")
 
-    m.invoke(null, null).asInstanceOf[Array[Int]]
+    m.invoke(o).asInstanceOf[Array[Int]]
   }
 }

@@ -40,7 +40,10 @@ object JavaCompiler {
         issue.getMessage(null))
     })
 
-    (success, issues)
+    val obj =
+      if (success) fileManager.getClassLoader(null).loadClass(className).newInstance()
+      else null
+    (success, issues, obj)
   }
 
   def offsetToLineColumn(code: String, position: Int) = {

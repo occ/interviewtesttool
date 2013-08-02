@@ -34,7 +34,7 @@ public class ClassFileManager extends
      * the JavaClassObject, and returns the Class for it
      */
     @Override
-    public ClassLoader getClassLoader(Location location) {
+    public ClassLoader getClassLoader(javax.tools.JavaFileManager.Location location) {
         return new SecureClassLoader() {
             @Override
             protected Class<?> findClass(String name)
