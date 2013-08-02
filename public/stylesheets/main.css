@@ -1,3 +1,19 @@
 body {
     padding-top: 50px;
 }
+
+#code-area {
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 400px;
+}
+
+.squiggly {
+    background: url("data:image/gif;base64,R0lGODlhCgAEAMIEAP9BGP6pl//Wy/7//P///////////////yH5BAEKAAQALAAAAAAKAAQAAAMROCOhK0oA0MIUMmTAZhsWBCYAOw==") repeat-x scroll 0px 100% transparent;
+    display: inline-block;
+    padding-bottom: 1px;
+    position: absolute;
+}
