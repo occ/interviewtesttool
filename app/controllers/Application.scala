@@ -33,11 +33,11 @@ object Application extends Controller {
 
     val question = new questions.divisibility.Divisibility
 
-    val (success, errors, obj) = JavaCompiler.compile(question.mainClass, code)
+    val (success, issues, obj) = JavaCompiler.compile(question.mainClass, code)
 
     val resultObj = Json.obj(
       "success" -> (if (success) true else false),
-      "errors" -> errors
+      "issues" -> issues
     )
     Ok(resultObj)
   }
@@ -47,12 +47,12 @@ object Application extends Controller {
 
     val question = new questions.divisibility.Divisibility
 
-    val (success, errors, obj) = JavaCompiler.compile(question.mainClass, code)
+    val (success, issues, obj) = JavaCompiler.compile(question.mainClass, code)
 
     if (!success) {
       Ok(Json.obj(
         "success" -> (if (success) true else false),
-        "errors" -> errors
+        "issues" -> issues
       ))
     } else {
       try {
@@ -61,7 +61,7 @@ object Application extends Controller {
       } catch {
         case e: Throwable => Ok(Json.obj(
           "success" -> false,
-          "issue" -> TestIssue(e.getClass.getName, e.getMessage)
+          "issues" -> Array[TestIssue](TestIssue(e.getClass.getName, e.getMessage))
         ))
       }
     }

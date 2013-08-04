@@ -12,9 +12,8 @@
 
 Range = ace.require("ace/range").Range
 
-addMarkers = (response) =>
+addMarkers = (data) =>
   clearMarkers()
-  data = response.responseJSON
   submitButton = $("#btn-submit")
 
   if data.success
@@ -25,16 +24,26 @@ addMarkers = (response) =>
   codeIssues = $("#code-issues")
   i = 0
 
-  while i < data.errors.length
-    error = data.errors[i]
+  while i < data.issues.length
+    error = data.issues[i]
     range = new Range(error.startLine, error.startColumn, error.endLine, error.endColumn)
     @markers.push @editorSession.addMarker(range, "squiggly", "typo", true)
     kind = "warning"
     kind = "danger"  if error.kind is "ERROR"
-    row = $("<tr></tr>").addClass(kind).append($("<td></td>").text(error.startLine), $("<td></td>").text(error.startColumn), $("<td></td>").text(error.message))
+    row = $("<tr></tr>").addClass(kind).append(
+      $("<td></td>").text(error.startLine),
+      $("<td></td>").text(error.startColumn),
+      $("<td></td>").text(error.message))
     codeIssues.append row
     i++
   null
+
+addTestFailure = (issue) =>
+  row = $("<tr></tr>").addClass("warning").append(
+    $("<td></td>").text("TEST"),
+    $("<td></td>").text(""),
+    $("<td></td>").text(issue.exceptionType + ": " + issue.message))
+  $("#code-issues").append row
 
 clearMarkers = =>
   i = 0
@@ -53,14 +62,23 @@ compile = (callback) =>
       code: @editor.getValue()
 
     dataType: "json"
-    complete: [addMarkers, callback]
+    success: [addMarkers, callback]
 
 
-processTestResults = =>
-  console.log arguments_
+processTestResults = (result) =>
+  if result.success
+    $("#code-issues").empty()
+    $("#code-issues").append($("<tr></tr>").addClass("success").append(
+      $("<td></td>").text(""),
+      $("<td></td>").text(""),
+      $("<td></td>").text("All tests passed!")
+    ))
+    return
+
+  addTestFailure issue for issue in result.issues
 
 submitSolution = =>
-  compile ->
+  compile =>
     $.ajax
       type: "POST"
       url: testUrl
@@ -68,7 +86,7 @@ submitSolution = =>
         code: @editor.getValue()
 
       dataType: "json"
-      success: processTestResults()
+      success: processTestResults
 
 $ ->
   $("#btn-submit").click submitSolution
