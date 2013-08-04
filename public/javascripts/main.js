@@ -21,14 +21,34 @@ var compilerTimer = null;
 var addMarkers = function(response) {
     clearMarkers();
 
-    data = response.responseJSON;
+    var data = response.responseJSON;
+    var submitButton = $("#btn-submit");
     if (data.success)
+    {
+        submitButton.removeAttr("disabled");
         return;
+    }
+
+    submitButton.attr("disabled", "disabled");
+
+    var codeIssues = $("#code-issues");
 
     for (var i = 0; i < data.errors.length; i++) {
         var error = data.errors[i];
         var range = new Range(error.startLine, error.startColumn, error.endLine, error.endColumn);
         markers.push(editorSession.addMarker(range, "squiggly", "typo", true));
+
+        var kind = "warning";
+        if (error.kind == "ERROR")
+            kind = "danger";
+
+        var row = $("<tr></tr>").addClass(kind).append(
+            $("<td></td>").text(error.startLine),
+            $("<td></td>").text(error.startColumn),
+            $("<td></td>").text(error.message)
+        );
+
+        codeIssues.append(row);
     }
 }
 
@@ -36,6 +56,7 @@ var clearMarkers = function () {
     for (var i = 0; i < markers.length; i++) {
         editorSession.removeMarker(markers[i]);
     }
+    $("#code-issues").empty();
     markers = [];
 }
 
