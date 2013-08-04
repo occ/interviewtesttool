@@ -14,20 +14,21 @@ class Divisibility extends Question{
 
   val template: String =
     """
+      |import java.util.*;
+      |
       |public class Divisibility {
-      |  public static Integer[] findNumbers() {
-      |    // Implement this method
-      |    return null;
-      |  }
+      |    public static Integer[] findNumbers() {
+      |        return null;
+      |    }
       |}
-      """.stripMargin.trim
+    """.stripMargin.trim
 
   val tests: Array[Any => Unit] = Array({
     c => {
-      val r = getResults(c)
-      val result = (for (i <- 3 to 10000 if i % 3 == 0 || i % 5 == 0) yield i.asInstanceOf[Integer]).toArray
+      val actual = getResults(c)
+      val expected = (for (i <- 3 to 10000 if i % 3 == 0 || i % 5 == 0) yield i.asInstanceOf[Integer]).toArray
 
-      assert(r.deep == result.deep)
+      assert(actual.deep == expected.deep)
     }
   })
 
