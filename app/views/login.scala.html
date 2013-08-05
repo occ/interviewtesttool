@@ -1,3 +1,14 @@
+@()(implicit flash: Flash)
+
 @main("Login") {
-    LOGIN FORM GOES HERE
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="danger">@flash.get("login")</div>
+            Please enter your email address to continue
+            <form class="form-inline" action="@routes.SecurityController.login()" method="POST">
+                <input type="text" class="form-control form-control-inline" placeholder="Email" name="email">
+                <button type="submit" class="btn btn-default">Log in</button>
+            </form>
+        </div>
+    </div>
 }

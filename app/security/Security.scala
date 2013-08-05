@@ -7,7 +7,7 @@ import controllers.routes
 trait Security {
   def username(request: RequestHeader) = request.session.get("email")
 
-  def Unauthorized(request: RequestHeader) = Results.Redirect(routes.Application.login)
+  def Unauthorized(request: RequestHeader) = Results.Redirect(routes.SecurityController.showLoginForm)
 
   def AuthenticatedAction(f: => String => Request[AnyContent] => Result) = {
     Authenticated(username, Unauthorized) {

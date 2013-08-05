@@ -15,7 +15,7 @@ object Application extends Controller with Security {
       "code" -> text
   )
 
-  def index = AuthenticatedAction { username => implicit request =>
+  def editor = AuthenticatedAction { username => implicit request =>
     val uid = session.get("uid") match {
       case None => UUID.randomUUID.toString
       case u: Some[String] => u.get
@@ -24,7 +24,7 @@ object Application extends Controller with Security {
     val questionId = "000-Divisibility"
     val question = new questions.divisibility.Divisibility
 
-    Ok(views.html.index(question.title, question.description, question.template)).withSession(
+    Ok(views.html.editor(question.title, question.description, question.template)).withSession(
       session + ("uid" -> uid) + ("question", questionId)
     )
   }
@@ -41,10 +41,6 @@ object Application extends Controller with Security {
       "issues" -> issues
     )
     Ok(resultObj)
-  }
-
-  def login = Action { implicit request =>
-    Ok(views.html.login)
   }
 
   def test = Action { implicit request =>

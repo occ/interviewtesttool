@@ -17,3 +17,7 @@ body {
     padding-bottom: 1px;
     position: absolute;
 }
+
+.form-control-inline {
+    width: 80%;
+}
