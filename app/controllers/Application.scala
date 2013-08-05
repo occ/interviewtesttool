@@ -7,14 +7,15 @@ import play.api.libs.json._
 import java.util.UUID
 import compiler.java.JavaCompiler
 import compiler.TestIssue
+import security.Security
 
-object Application extends Controller {
+object Application extends Controller with Security {
 
   val codeForm = Form(
       "code" -> text
   )
 
-  def index = Action { implicit request =>
+  def index = AuthenticatedAction { username => implicit request =>
     val uid = session.get("uid") match {
       case None => UUID.randomUUID.toString
       case u: Some[String] => u.get
@@ -40,6 +41,10 @@ object Application extends Controller {
       "issues" -> issues
     )
     Ok(resultObj)
+  }
+
+  def login = Action { implicit request =>
+    Ok(views.html.login)
   }
 
   def test = Action { implicit request =>
