@@ -28,7 +28,8 @@ class Divisibility extends Question{
       val actual = getResults(c)
       val expected = (for (i <- 3 to 10000 if i % 3 == 0 || i % 5 == 0) yield i.asInstanceOf[Integer]).toArray
 
-      assert(actual.deep == expected.deep)
+      assert(actual != null, "Doesn't return null")
+      assert(actual.deep == expected.deep, "Returns expected results")
     }
   })
 
