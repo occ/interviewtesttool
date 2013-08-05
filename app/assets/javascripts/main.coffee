@@ -69,8 +69,8 @@ processTestResults = (result) =>
   if result.success
     $("#code-issues").empty()
     $("#code-issues").append($("<tr></tr>").addClass("success").append(
-      $("<td></td>").text(""),
-      $("<td></td>").text(""),
+      $("<td></td>").text("✓"),
+      $("<td></td>").text("✓"),
       $("<td></td>").text("All tests passed!")
     ))
     return
