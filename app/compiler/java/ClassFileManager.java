@@ -51,7 +51,7 @@ public class ClassFileManager extends
      * so that the compiler can write the byte code into it.
      */
     @Override
-    public JavaFileObject getJavaFileForOutput(Location location,
+    public JavaFileObject getJavaFileForOutput(javax.tools.JavaFileManager.Location location,
                                                String className, JavaFileObject.Kind kind, FileObject sibling)
             throws IOException {
         jClassObject = new JavaClassObject(className, kind);
