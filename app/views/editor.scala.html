@@ -1,12 +1,12 @@
-@(title: String, question: String = "", code: String = "")
+@(question: interfaces.Question)
 
-@main(title) {
+@main(question.title) {
     <div class="row">
         <div class="col-12 col-lg-8">
             <fieldset>
                 <div class="form-group">
-                    <label>@question</label>
-                    <div id="code-area" name="code">@code</div>
+                    <label>@question.description</label>
+                    <div id="code-area">@question.template</div>
                 </div>
                 <button type="button" id="btn-submit" class="btn btn-large btn-primary">Submit</button>
             </fieldset>

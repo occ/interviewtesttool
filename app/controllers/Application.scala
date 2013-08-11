@@ -4,7 +4,6 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc._
 import play.api.libs.json._
-import java.util.UUID
 import compiler.java.JavaCompiler
 import compiler.TestIssue
 import security.Security
@@ -16,16 +15,15 @@ object Application extends Controller with Security {
   )
 
   def editor = AuthenticatedAction { username => implicit request =>
-    val uid = session.get("uid") match {
-      case None => UUID.randomUUID.toString
-      case u: Some[String] => u.get
+    val questionId = session.get("q") match {
+      case None => "000-Divisibility"
+      case q: Some[String] => q.get
     }
 
-    val questionId = "000-Divisibility"
     val question = new questions.divisibility.Divisibility
 
-    Ok(views.html.editor(question.title, question.description, question.template)).withSession(
-      session + ("uid" -> uid) + ("question", questionId)
+    Ok(views.html.editor(question)).withSession(
+      session + ("q" -> questionId)
     )
   }
 
