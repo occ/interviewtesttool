@@ -3,7 +3,7 @@ package questions.divisibility
 import interfaces.Question
 import org.junit.Assert._
 
-class Divisibility extends Question{
+object Divisibility extends Question{
   val id: String = "000-Divisibility"
 
   val description: String = "Write a method that returns an integer array of integers between 1 and 10000 that are divisible by 3 or 5"

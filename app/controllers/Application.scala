@@ -7,6 +7,7 @@ import play.api.libs.json._
 import compiler.java.JavaCompiler
 import compiler.TestIssue
 import security.Security
+import questions.QuestionHelper
 
 object Application extends Controller with Security {
 
@@ -14,23 +15,27 @@ object Application extends Controller with Security {
       "code" -> text
   )
 
-  def editor = AuthenticatedAction { username => implicit request =>
-    val questionId = session.get("q") match {
+  def currentQuestionId(implicit request: RequestHeader) = {
+    session.get("q") match {
       case None => "000-Divisibility"
       case q: Some[String] => q.get
     }
+  }
 
-    val question = new questions.divisibility.Divisibility
+  def currentQuestion(implicit request: RequestHeader) = QuestionHelper.getQuestion(currentQuestionId)
+
+  def editor = AuthenticatedAction { username => implicit request =>
+    val question = currentQuestion.get
 
     Ok(views.html.editor(question)).withSession(
-      session + ("q" -> questionId)
+    session + ("q" -> currentQuestionId)
     )
   }
 
   def compile = Action { implicit request =>
     val code = codeForm.bindFromRequest.get
 
-    val question = new questions.divisibility.Divisibility
+    val question = currentQuestion.get
 
     val (success, issues, obj) = JavaCompiler.compile(question.mainClass, code)
 
@@ -44,7 +49,7 @@ object Application extends Controller with Security {
   def test = Action { implicit request =>
     val code = codeForm.bindFromRequest.get
 
-    val question = new questions.divisibility.Divisibility
+    val question = currentQuestion.get
 
     val (success, issues, obj) = JavaCompiler.compile(question.mainClass, code)
 

@@ -1,15 +1,11 @@
 package questions
 
-import org.reflections.Reflections
 import interfaces.Question
-import scala.collection.JavaConverters._
+import questions.divisibility.Divisibility
 
 object QuestionHelper {
-  def FindQuestion(id: String): Option[Question] = {
-    val reflections = new Reflections("questions")
-    val questions= reflections.getSubTypesOf[Question](classOf[Question]).asScala
-    val question = for (q <- questions if q.getField("id").get(null).asInstanceOf[String] == id) yield q
+  // FIXME: Nicer, reflection based way to do this?
+  val questions = List(Divisibility)
 
-    question.headOption.map(q => q.newInstance)
-  }
+  def getQuestion(id: String): Option[Question] = questions.find(_.id == id)
 }
